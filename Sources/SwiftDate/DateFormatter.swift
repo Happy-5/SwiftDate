@@ -258,7 +258,7 @@ public class DateFormatter {
                                                                args: value)
             }
 
-            if components.second != 0 { // Seconds difference
+            if components.second != 0 || components.second == 0 { // Seconds difference
 				return sd_localizedString("colloquial_now", arguments: [])
             }
 
@@ -383,14 +383,8 @@ public class DateFormatter {
      - returns: localized string with optional arguments values filled
      */
     private func sd_localizedString(identifier: String, arguments: CVarArgType...) -> String {
-        guard let frameworkBundle = NSBundle(identifier: "com.danielemagutti.SwiftDate") else {
-            return ""
-        }
-        let path = NSURL(fileURLWithPath: frameworkBundle.resourcePath!)
-            .URLByAppendingPathComponent("SwiftDate.bundle")
-        guard let bundle = NSBundle(URL: path!) else {
-            return ""
-        }
+        guard let bundle = self.bundle else { return "" }
+
         var localized_str = NSLocalizedString(identifier, tableName: "SwiftDate",
                                                 bundle: bundle, comment: "")
         localized_str = String(format: localized_str, arguments: arguments)
